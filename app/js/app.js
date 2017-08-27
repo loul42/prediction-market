@@ -4,7 +4,7 @@ require("file-loader?name=../index.html!../index.html");
 const Web3 = require("web3");
 const Promise = require("bluebird");
 const truffleContract = require("truffle-contract");
-const campaignJson = require("../../build/contracts/Campaign.json");
+const PredictionMarketJson = require("../../build/contracts/PredictionMarket.json");
 
 if (typeof web3 !== 'undefined') {
     // Use the Mist/wallet/Metamask provider.
@@ -17,75 +17,61 @@ Promise.promisifyAll(web3.eth, { suffix: "Promise" });
 Promise.promisifyAll(web3.version, { suffix: "Promise" });
 
 
-const Campaign = truffleContract(campaignJson);
-Campaign.setProvider(web3.currentProvider);
+const PredictionMarket = truffleContract(PredictionMarketJson);
+PredictionMarket.setProvider(web3.currentProvider);
 
-var app = angular.module('app', []);
+var app = angular.module('PredictionMarketApp', []);
 
 app.config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
 });
 
 
-app.controller("CampaignCtrl", [ '$scope', '$location', '$http', '$q', '$window', '$timeout', 
+app.controller("PredictionMarketCtrl", [ '$scope', '$location', '$http', '$q', '$window', '$timeout', 
   function ($scope, $location, $http, $q, $window, $timeout) {
   $scope.contributionLog = [];
   
-  Campaign.deployed()
+
+  PredictionMarket.deployed()
   .then(function (_instance) {
     $scope.contract = _instance;
     console.log("The Contract:", $scope.contract);
 
     //don't want this to happen before the contract is known
 
-    $scope.contributionWatcher = $scope.contract.LogContribution({}, {fromBlock: 0})
-    .watch(function (err, newContribution) {
-      if (err) {
-        console.log("Error watching contribution events", err);
-      } else {
-        console.log("Contribution", newContribution);
-        newContribution.args.amount = newContribution.args.amount.toString(10);
-        $scope.contributionLog.push(newContribution);
-        return $scope.getCampaignStatus();
-      }
-    })
+    // $scope.betWatcher = $scope.contract.LogContribution({}, {fromBlock: 0})
+    // .watch(function (err, newContribution) {
+    //   if (err) {
+    //     console.log("Error watching contribution events", err);
+    //   } else {
+    //     console.log("Contribution", newContribution);
+    //     newContribution.args.amount = newContribution.args.amount.toString(10);
+    //     $scope.contributionLog.push(newContribution);
+    //     return $scope.getCampaignStatus();
+    //   }
+    // })
 
-    return $scope.getCampaignStatus();
-  })
+    return $scope.getPredictionMarketStatus();
+  });
 
-  $scope.getCampaignStatus = function () {
-    return $scope.contract.fundsRaised({from: $scope.account})
-    .then(function (_fundsRaised) {
-      console.log("fundsRaised", _fundsRaised.toString(10));
-      $scope.campaignFundsRaised = _fundsRaised.toString(10);
-      return $scope.contract.goal({ from: $scope.account });
-    }) 
-    .then(function (_goal) {
-      console.log("goal", _goal.toString(10));
-      $scope.campaginGoal = _goal.toString(10);
-      return $scope.contract.deadline({ from: $scope.account });
-    })
-    .then(function (_deadline) {
-      console.log("deadline", _deadline.toString(10));
-      $scope.campaignDeadline = _deadline.toString(10);
+  $scope.getPredictionMarketStatus = function () {
+    return $scope.contract.getQuestionCount({from: $scope.account})
+    .then(function (_questionCount) {
+      console.log("Number of questions", _questionCount.toString(10));
+      $scope.questionsCount = _questionCount.toString(10);
+      $scope.getQuestion();
+
       return $scope.contract.owner({ from: $scope.account });
-    })
+    }) 
     .then(function (_owner) {
       console.log("owner", _owner);
-      $scope.campaignOwner = _owner;
-      return $scope.contract.isSuccess({ from: $scope.account });
-    })
-    .then(function (_isSuccess) {
-      console.log("isSuccess", _isSuccess);
-      $scope.campaignIsSuccess = _isSuccess;
-      return $scope.contract.hasFailed({ from: $scope.account });
-    })
-    .then(function (_hasFailed) {
-      console.log("hasFailed", _hasFailed);
-      $scope.campaignHasFailed = _hasFailed;
+      $scope.owner = _owner;
+      $scope.isOwner = ($scope.account == _owner) ? true : false;
+      console.log("is Owner : " + $scope.isOwner);
+
       return $scope.getCurrentblockNumber();
-    })
-  }
+    });
+  };
 
 
   $scope.getCurrentblockNumber = function () {
@@ -99,7 +85,8 @@ app.controller("CampaignCtrl", [ '$scope', '$location', '$http', '$q', '$window'
       } 
 
     })
-  }
+  };
+
 
   web3.eth.getAccounts(function (err, accs) {
     if (err != null) {
@@ -122,8 +109,49 @@ app.controller("CampaignCtrl", [ '$scope', '$location', '$http', '$q', '$window'
       $scope.$apply();
     })
 
-  })
-    
+  });
 
 
-}])
+  // Questions Management
+  // Add a question
+  $scope.addQuestion = function(newId, newName) {
+    $scope.contract.addQuestion(
+        newId,
+        newName,
+        {from: $scope.account, gas: 300000})
+      .then(function (tx) {
+        console.log(tx);
+        return web3.eth.getTransactionReceiptPromise(tx)
+        .then(function (receipt) {
+           console.log("Question added");
+          return $scope.getPredictionMarketStatus();
+        });
+      });
+  };
+
+  $scope.getQuestion = function() {
+      return $scope.contract.getQuestionCount({from: $scope.account})
+      .then((count) => {
+        var getQuestionPromises = [];
+        for(var i=0; i<count.valueOf(); i++){
+          getQuestionPromises.push($scope.contract.getQuestion(i));
+        }
+        console.log(Promise.all(getQuestionPromises));
+        return Promise.all(getQuestionPromises);
+      }).then((_questions) => {
+        $scope.questions = _questions.map(mapQuestions);
+        console.log(_questions.map(mapQuestions));
+        $scope.$apply();
+        return $scope.questions;
+      })
+  };
+
+function mapQuestions(array) {
+        return {
+            name: array[0],
+            amount: web3.fromWei(array[1].toNumber(), 'ether')
+        }
+
+    };
+
+}]);

@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="product in products">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{product.name}}</div>
+            <div class="panel-body">
+                <p>Price: {{product.priceToShow}} ether</p>
+                <p>Stock: {{product.amount}} units</p>
+                <button class="btn btn-primary btn-sm pull-right" ng-disabled="product.amount<1" ng-click="buy(product)">BUY</button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

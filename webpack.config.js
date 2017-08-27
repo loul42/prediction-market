@@ -5,7 +5,7 @@ module.exports = {
 	entry: {'app' : glob.sync("./app/js/*.js"),},
 	output: {
 		path: path.join(__dirname, "/build/app/js"),
-		filename: "[name]1.js"
+		filename: "[name].js"
 	},
 	module: {
 		loaders: []

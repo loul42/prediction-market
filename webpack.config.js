@@ -2,16 +2,18 @@ var glob = require('glob');
 var path = require('path');
 
 module.exports = {
-	entry: {'app' : glob.sync("./app/js/*.js"),},
+	entry: {'app' : glob.sync("./app/*.js"),
+			'questions' : glob.sync("./app/questions/*.js")
+			},
 	output: {
-		path: path.join(__dirname, "/build/app/js"),
+		path: path.join(__dirname, "/build/app"),
 		filename: "[name].js"
 	},
 	module: {
 		loaders: []
 	},
 	devServer: {
-    	contentBase: './build/app',
+    	contentBase: './build/',
     	inline: true
   },
 };

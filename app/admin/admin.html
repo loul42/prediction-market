@@ -1,0 +1,12 @@
+
+ <div class="col-md-6" ng-if="isOwner">
+    <h3>Admin Panel</h3>
+    <h3>Add a question</h3>
+    <fieldset>
+      <span for="id">Id:</span>
+      <input type="number" id="id" placeholder="1" ng-model="newId"/>
+      <span for="name">Question ?:</span>
+      <input type="text" id="name" placeholder="Is the sun yellow ?" ng-model="newName"/>
+      <button id="addQuestion" ng-click="addQuestion(newId, newName)">Add</button>
+    </fieldset>
+  </div>

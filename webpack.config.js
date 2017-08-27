@@ -5,9 +5,13 @@ module.exports = {
 	entry: {'app' : glob.sync("./app/js/*.js"),},
 	output: {
 		path: path.join(__dirname, "/build/app/js"),
-		filename: "[name].js"
+		filename: "[name]1.js"
 	},
 	module: {
 		loaders: []
-	}
+	},
+	devServer: {
+    	contentBase: './build/app',
+    	inline: true
+  },
 };

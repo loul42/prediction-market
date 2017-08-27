@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "dev": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +14,8 @@
     "file-loader": "^0.11.2",
     "path": "^0.12.7",
     "truffle": "^3.4.9",
-    "webpack": "^3.5.5"
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
     "bluebird": "^3.5.0",

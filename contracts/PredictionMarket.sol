@@ -15,7 +15,7 @@ contract PredictionMarket is Owned {
 		uint betAmount;
 	}
 
-	function addQuestion(uint id, string question)
+	function addQuestion(uint id, string question, uint betAmount)
 		public
 		onlyOwner
 		returns (bool success)

@@ -154,10 +154,20 @@ contract PredictionMarket is AdminManaged {
     function getQuestion(uint id)
     	constant
     	public
-    	returns (string name, uint betAmount)
+    	returns (uint qId, string name, uint betStatus, uint betAmount, uint betCount, uint betAmountYes, uint betCountYes,
+            uint betAmountNo, uint betCountNo, bool answer)
     {
     	QuestionStruct question = questionStructs[id];
-    	return (question.question, question.betAmount);
+    	return (question.listPointer,
+                question.question, 
+                uint(question.betStatus),
+                question.betAmount,
+                question.betCount,
+                question.betAmountYesTot,
+                question.betCountYes,
+                question.betAmountNoTot,
+                question.betCountNo,
+                question.answer);
     }
 
     function getQuestionsCount()

@@ -20,7 +20,7 @@ module.exports = ['$rootScope', '$timeout', 'market', function ($rootScope, $tim
 
 
           scope.getPredictionMarketStatus = function () {
-            return instance.getQuestionCount({from: scope.account})
+            return instance.getQuestionsCount({from: scope.account})
             .then(function (_questionCount) {
               console.log("Number of questions", _questionCount.toString(10));
               scope.questionsCount = _questionCount.toString(10);
@@ -30,10 +30,11 @@ module.exports = ['$rootScope', '$timeout', 'market', function ($rootScope, $tim
               console.log("owner", _owner);
               scope.owner = _owner;
               $rootScope.isOwner = (scope.account == _owner) ? true : false;
-              return scope.getCurrentblockNumber();
+              
+              scope.getCurrentblockNumber();
+              scope.updateBalance();
             });
           };
-
 
           scope.updateBalance = function() {
             web3.eth.getBalance(scope.account, function (err, _balance) {

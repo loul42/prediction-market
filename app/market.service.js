@@ -15,7 +15,7 @@ module.exports = ['$rootScope', '$timeout', function ($rootScope, $timeout) {
     return {
         getContract:function(){return Market;},
         getQuestions:function(instance){
-            return instance.getQuestionCount().then(count => {
+            return instance.getQuestionsCount().then(count => {
                 count = count.toNumber();
                 var getQuestionPromises = [];
                 for (var i = 0; i < count; i++) {

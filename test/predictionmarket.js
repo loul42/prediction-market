@@ -39,7 +39,7 @@ contract('PredictionMarket', function(accounts) {
   });
 
   it("should not add a question if not owner", (done) => {
-     instance.addQuestion.call(1, "Sky is blue ?",
+     instance.addQuestion.call("Sky is blue ?",
         { from: accounts[1], gas: 3000000 })
     .then(_success => {
       done(new Error("User submitted a tx and created a remittance with zero value"));
@@ -50,38 +50,47 @@ contract('PredictionMarket', function(accounts) {
     });
   });
 
+
   it("should be possible to add a question", () => {
     var blockNumber;
-
-    return instance.addQuestion.call(1, "Sky is blue ?")
-    .then((_success) => {
-      assert.isTrue(_success, "should be possible to add a question - dry call");
+    return instance.addQuestion.call("Sky is blue ?")
+    .then((_qId) => {
+      assert.equal(_qId.valueOf(), 0, "should be possible to add the 1st question - dry call")
       blockNumber = web3.eth.blockNumber + 1;
-      return instance.addQuestion(1, "Sky is blue ?", {from: account0})
-      .then((_txn) => {
-        return getEventsPromise(instance.LogQuestionAdded(
-                {},
-                { fromBlock: blockNumber, toBlock: "latest" }))
-        .then((_events) => {
-          var eventArgs = _events[0].args;
-          assert.equal(eventArgs.id.valueOf(), 1, "should be the question id");
-          assert.equal(eventArgs.name, "Sky is blue ?", "should be the question name");
-          return instance.getQuestionCount.call()
-          .then((count) => {
-            assert(count.valueOf(), 1, "should has add a question");
-            return instance.getQuestionIdAt(0)
-            .then((_id) => {
-              assert.equal(_id.valueOf(), 1, "should be the first id");
-              return instance.getQuestion(1)
-              .then((values) => {
-                assert.equal(values[0], "Sky is blue ?", "should be the question name");
-              });
-            });
-          });
-        });
-      });
+      return instance.addQuestion("Sky is blue ?", {from: account0}); 
+    })
+    .then((_txn) => {
+      return getEventsPromise(instance.LogQuestionAdded(
+            {},
+            { fromBlock: blockNumber, toBlock: "latest" }));
+    })
+    .then((_events) => {
+      var eventArgs = _events[0].args;
+      assert.equal(eventArgs.id.valueOf(), 0, "should be the question id");
+      assert.equal(eventArgs.name, "Sky is blue ?", "should be the question name");
+      return instance.getQuestionsCount.call();
+    })
+    .then((count) => {
+      assert.equal(count.valueOf(), 1, "should has add a question");
+      return instance.getQuestion(0);
+    })
+    .then((values) => {
+      assert.equal(values[0], 0, "should be the question name");
+      assert.equal(values[1], "Sky is blue ?", "should be the question name");  
     });
+
   });
+
+  it("should have a count of 1 question", () => {
+    return instance.getQuestionsCount.call()
+          .then((count) => {
+            console.log(count.valueOf());
+            assert.equal(count.valueOf(), 1, "should has add a question");
+     })
+  });
+
+
+
 
 });
 

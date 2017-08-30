@@ -12,14 +12,13 @@
       </span>
       <span class="row">
         <button class="btn btn-primary btn-sm pull-right" ng-disabled="question.status==2" ng-click="vote(1, question.id, newBetAmount)">Vote Yes</button>
-        <input type="text" id="betAmount" placeholder="Amount To Bet" ng-model="newBetAmount"/>
-        <button class="btn btn-danger btn-sm pull-left" ng-disabled="question.status==2" ng-click="vote(0, question.id, newBetAmount) ">Vote No</button>
+  
+        <input class="centerText" type="text" id="betAmount" placeholder="Amount To Bet in Wei" ng-model="newBetAmount"/>
+
+        <button class="btn btn-danger btn-sm pull-left" ng-disabled="question.status==2" ng-click="vote(0, question.id, newBetAmount)">Vote No</button>
         </span>
-       </li> 
+       </li>
     </ul>
 </div>
-
-
-       
 
 </div>

@@ -170,12 +170,12 @@ contract PredictionMarket is AdminManaged {
                 question.answer);
     }
 
-    function getQuestionsCount()
+    function hasBetted()
         public
         constant
-        returns(uint count)
+        returns()
     {
-        return questionStructs.length;
+
     }
 
     function isQuestion(uint id) 

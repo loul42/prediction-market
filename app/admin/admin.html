@@ -7,4 +7,13 @@
       <input type="text" id="name" placeholder="Is the sun yellow ?" ng-model="newName"/>
       <button id="addQuestion" ng-click="addQuestion(newName)">Add</button>
     </fieldset>
+    <h3>Resolve a question</h3>
+    <fieldset>
+      <span for="questionID"></span>
+      <input type="text" id="questionID" placeholder="question id" ng-model="newQuestionId"/>
+      <span for="vote"></span>
+      <input type="text" id="answer" placeholder="answer" ng-model="newAnswer"/>
+      <button id="resolveQuestion" ng-click="resolveQuestion(newQuestionId, newAnswer)">Resolve</button>
+      
+    </fieldset>
   </div>

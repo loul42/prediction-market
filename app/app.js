@@ -26,8 +26,6 @@ app.config(function ($locationProvider) {
     $locationProvider.html5Mode(false);
 });
 
-
-
 app.run(['$rootScope', 'market', function ($rootScope, market) {
     web3.eth.getAccountsPromise()
         .then(accounts => {
@@ -49,7 +47,6 @@ app.run(['$rootScope', 'market', function ($rootScope, market) {
     });
 
 }]);
-
 
 app.service("market", require("./market.service.js"));
 app.directive("questions", require("./questions/questions.js"));

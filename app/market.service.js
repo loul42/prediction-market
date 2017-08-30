@@ -20,14 +20,12 @@ module.exports = ['$rootScope', '$timeout', function ($rootScope, $timeout) {
         }
     };
 
-
     function getQuestionStatus(_enum) {
 
         if(_enum == 0) return "Pending";
         if(_enum == 1) return "Canceled";
         if(_enum == 2) return "Resolved";
     }
-
 
     return {
         getContract:function(){return Market;},

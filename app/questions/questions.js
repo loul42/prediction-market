@@ -46,12 +46,13 @@ module.exports = ['$rootScope', '$timeout', 'market', function ($rootScope, $tim
             scope.vote = (_vote, qId, amount ) => {
                 console.log(_vote,qId.valueOf(),amount);
                 if(amount > 0 && (_vote==0 || _vote==1)){
-                    instance.betQuestionId.sendTransaction(qId, _vote, { from: scope.account, value: amount, gas: 4500000}).then((txn) => {
+                    instance.betQuestionId.sendTransaction(qId, _vote, { from: scope.account, value: amount, {gas: 4500000}).then((txn) => {
                         console.log("txn bet passed" + txn);
                     });
                 }
 
             }
+
             // scope.buy = (product) => {
             //     var index = scope.products.indexOf(product);
             //     instance.buy.sendTransaction(index, { from: scope.account, value: product.price }).then((hash) => {

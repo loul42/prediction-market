@@ -22,15 +22,17 @@
 <!--   <script src="js/angular.js"></script> -->
   <script src="app.js"></script>
 
+
 </head>
 <body ng-cloak>
 
   <div class="container">
-    <h1> Prediction Market </h1>
-    <questions ng-if="account&&instance" instance="instance" account="account"></questions>
     <profil ng-if="account&&instance" instance="instance" account="account"></profil>
+    <questions ng-if="account&&instance" instance="instance" account="account"></questions>
     <admin ng-if="account&&instance" instance="instance" account="account"> </admin>
   </div>
+
+
 
   <script>
   	window.addEventListener('load', function () {

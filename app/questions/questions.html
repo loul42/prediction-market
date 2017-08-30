@@ -1,13 +1,25 @@
-<div class="column justify-content-md-center">
+<div class="row justify-content-md-center">
 
     <ul class="col col-lg-6 list-group">
      <h3> List of questions </h3>
       <li class="list-group-item" ng-repeat="question in questions">
-      <span class="row">{{question.name}}
-       <p>Total reward: {{question.amount}} units</p>
-        <button class="btn btn-primary btn-sm pull-right" ng-disabled="product.amount<1" ng-click="buy(product)">Vote Yes</button>
-        <button class="btn btn-primary btn-sm pull-left" ng-disabled="product.amount<1" ng-click="buy(product)">Vote No</button>
+      <span class="row">
+        <h4>{{question.name}}</h4>
+        <h6> Total reward to share : {{question.totalBetAmount}} units</h6>
+        <h6> Question status : {{question.qStatus}} </h6>
+        <h6> Number of yes : {{question.totalBetCountYes}}</h6>
+        <h6> Number of no : {{question.totalBetCountNo}} </h6>
+      </span>
+      <span class="row">
+        <button class="btn btn-primary btn-sm pull-right" ng-disabled="question.status==2" ng-click="vote(1, question.id, newBetAmount)">Vote Yes</button>
+        <input type="text" id="betAmount" placeholder="Amount To Bet" ng-model="newBetAmount"/>
+        <button class="btn btn-danger btn-sm pull-left" ng-disabled="question.status==2" ng-click="vote(0, question.id, newBetAmount) ">Vote No</button>
         </span>
        </li> 
     </ul>
+</div>
+
+
+       
+
 </div>

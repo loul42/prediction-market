@@ -22,10 +22,8 @@ module.exports = ['$rootScope', '$timeout', 'market', function ($rootScope, $tim
             }
           });
       
-          scope.addQuestion = function(newId, newName) {
-           
+          scope.addQuestion = function(newName) {
               instance.addQuestion(
-                  newId,
                   newName.toString(),
                   {from: scope.account, gas: 300000})
               .then(function (tx) {

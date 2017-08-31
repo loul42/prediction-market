@@ -25,3 +25,10 @@ truffle migrate --reset
 npm run dev
 ```
 Project will run on http://localhost:8080
+
+## Preview (UI is not finished)
+
+![alt text](http://i.imgur.com/7bx7S7J.png "Preview")
+
+
+
